@@ -186,7 +186,7 @@ async def start_web_server():
 
     port = int(os.environ.get("PORT", "10000"))
     site = web.TCPSite(runner, "0.0.0.0", port)
-    print ("PORT env=", od.environ.get("PORT"))
+    print ("PORT env=", os.environ.get("PORT"))
     print("Starting web server on", port)
     await site.start()
 async def main():
