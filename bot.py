@@ -153,6 +153,8 @@ async def check_password(message: Message, state: FSMContext):
             await message.answer(gift["text"])
             await message.answer("Картинка не найдена (проверьте папку media).")
 
+        await asyncio.sleep(5)
+        
         song_path = gift.get("song")
         if song_path and song_path.exists():
             await bot.send_audio(
