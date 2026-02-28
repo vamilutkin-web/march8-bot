@@ -1,8 +1,9 @@
 import asyncio
 import json
+import os
+from aiohttp import web
 from pathlib import Path
 from typing import Dict
-
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, FSInputFile
 from aiogram.filters import CommandStart
@@ -171,8 +172,25 @@ async def check_password(message: Message, state: FSMContext):
         else:
             remain = MAX_ATTEMPTS - attempts[user_id][name]
             await message.answer(f"Неверный пароль. Осталось попыток: {remain}")
+async def start_web_server():
+    app = web.Application()
 
+    async def health(request):
+        return web.Response(text="ok")
+
+    app.router.add_get("/", health)
+    app.router.add_get("/health", health)
+
+    runner = web.AppRunner(app)
+    await runner.setup()
+
+    port = int(os.environ.get("PORT", "10000"))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    print ("PORT env=", od.environ.get("PORT"))
+    print("Starting web server on", port)
+    await site.start()
 async def main():
+    await start_web_server()
     print("Бот запущен")
     await dp.start_polling(bot)
 
